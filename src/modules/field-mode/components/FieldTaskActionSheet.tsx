@@ -57,8 +57,9 @@ export function FieldTaskActionSheet({
   if (!task) return null;
 
   function handlePhotoCapture(forCompletion?: boolean) {
-    if (!fileInputRef.current) return;
+    if (!fileInputRef.current || !task) return;
     const input = fileInputRef.current;
+    const taskId = task.base.id;
     input.onchange = (e: Event) => {
       const target = e.target as HTMLInputElement;
       const file = target.files?.[0];
@@ -66,9 +67,9 @@ export function FieldTaskActionSheet({
       const fakeId = `media-${Date.now()}`;
       // In this mock, we don't persist actual URLs; we just track IDs.
       if (forCompletion) {
-        onComplete(task.base.id, { withPhoto: true, mediaIds: [fakeId] });
+        onComplete(taskId, { withPhoto: true, mediaIds: [fakeId] });
       } else {
-        onUploadPhoto(task.base.id, fakeId);
+        onUploadPhoto(taskId, fakeId);
       }
       target.value = "";
     };
