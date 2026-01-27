@@ -27,6 +27,17 @@ import type { UserRole } from "@/modules/auth/types";
 const ADMIN_ROLES: UserRole[] = ["admin"];
 const REPORT_ROLES: UserRole[] = ["admin", "supervisor"]; // ADMIN + SITE_SUPERVISOR
 
+// Base workspace items use :projectId as placeholder - will be replaced dynamically
+export const workspaceNavItems: NavItem[] = [
+  { label: "Overview", href: "/projects/:projectId/overview", icon: Home },
+  { label: "Build", href: "/projects/:projectId/build", icon: Settings2 },
+  { label: "BOQ", href: "/projects/:projectId/boq", icon: FileText },
+  { label: "Tasks", href: "/projects/:projectId/tasks", icon: ListChecks },
+  { label: "QC", href: "/projects/:projectId/qc", icon: ShieldCheck },
+  { label: "Notes", href: "/projects/:projectId/notes", icon: StickyNote },
+  { label: "Activity", href: "/projects/:projectId/activity", icon: Users },
+];
+
 export const primaryNav: NavItem[] = [
   {
     label: "Dashboard",
@@ -37,21 +48,7 @@ export const primaryNav: NavItem[] = [
     label: "Projects",
     href: "/projects",
     icon: FolderKanban,
-    children: [
-      { label: "Project Dashboard", href: "/projects/dashboard", icon: Home },
-      { label: "Build", href: "/projects/build", icon: Settings2 },
-      { label: "BOQ", href: "/projects/boq", icon: FileText },
-      { label: "Tasks", href: "/projects/tasks", icon: ListChecks },
-      // Visits moved into Activity for V1 – keep config commented for future reuse.
-      // { label: "Visits", href: "/projects/visits", icon: Users },
-      { label: "QC", href: "/projects/qc", icon: ShieldCheck },
-      { label: "Notes", href: "/projects/notes", icon: StickyNote },
-      { label: "Activity", href: "/projects/activity", icon: Users },
-      // Files depends on Google Drive integration – hidden for V1.
-      // { label: "Files", href: "/projects/files", icon: FileText },
-      // Chat lives as a fixed right-side panel – sidebar entry hidden for V1.
-      // { label: "Chat", href: "/projects/chat", icon: MessageCircle },
-    ],
+    // children are now handled dynamically in AppShell
   },
   {
     label: "Reports",
@@ -69,14 +66,31 @@ export const primaryNav: NavItem[] = [
 
 export function useActivePath() {
   const pathname = usePathname();
+  
+  // Extract projectId from pathname if we're in a project context
+  const projectIdMatch = pathname?.match(/\/projects\/([^/]+)/);
+  const currentProjectId = projectIdMatch ? projectIdMatch[1] : null;
+  
   return {
     pathname,
+    currentProjectId,
     isActive: (href: string) => {
       if (!pathname) return false;
       if (href === "/") return pathname === "/";
-      return pathname === href || pathname.startsWith(`${href}/`);
+      // Handle dynamic project routes
+      const normalizedHref = href.replace(":projectId", currentProjectId || "");
+      return pathname === normalizedHref || pathname.startsWith(`${normalizedHref}/`);
     },
   };
+}
+
+// Helper to get workspace items with actual project ID
+export function getWorkspaceItemsForProject(projectId: string | null): NavItem[] {
+  if (!projectId) return [];
+  return workspaceNavItems.map((item) => ({
+    ...item,
+    href: item.href.replace(":projectId", projectId),
+  }));
 }
 
 export function filterNavByRole(items: NavItem[], role: UserRole | null): NavItem[] {

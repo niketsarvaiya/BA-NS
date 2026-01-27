@@ -15,7 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/modules/auth/context/AuthContext";
 import { useRequireAuth } from "@/modules/auth/utils/guards";
-import { primaryNav, filterNavByRole, useActivePath } from "../utils/navigation";
+import { primaryNav, filterNavByRole, useActivePath, getWorkspaceItemsForProject } from "../utils/navigation";
 import type { NavItem } from "../types";
 import { Button } from "@/components/ui/button";
 import { GlobalNoteComposer } from "@/modules/notes/components/GlobalNoteComposer";
@@ -34,7 +34,7 @@ export function AppShell({ children }: AppShellProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [showWorkspace, setShowWorkspace] = useState(true);
-  const { pathname, isActive } = useActivePath();
+  const { pathname, isActive, currentProjectId } = useActivePath();
   const {
     totalUnread: chatUnread,
     isPanelOpen: isMessagingOpen,
@@ -59,8 +59,8 @@ export function AppShell({ children }: AppShellProps) {
   const coreItems = navItems.filter((item) =>
     ["Dashboard", "Field", "Projects"].includes(item.label)
   );
-  const projectsItem = navItems.find((item) => item.label === "Projects");
-  const workspaceItems = projectsItem?.children ?? [];
+  // Get workspace items dynamically based on current project ID
+  const workspaceItems = getWorkspaceItemsForProject(currentProjectId);
   const adminItems = navItems.filter((item) =>
     ["Reports", "Admin Panel"].includes(item.label)
   );
