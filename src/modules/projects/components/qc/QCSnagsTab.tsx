@@ -194,7 +194,7 @@ function SnagRow({ snag, onClick, onStatusChange }: SnagRowProps) {
         {(snag.status === "OPEN" || snag.status === "IN_PROGRESS") && (
           <div className="flex gap-1">
             <Button
-              size="xs" // @ts-expect-error: xs size not yet typed, but supported in Button styles
+              size="sm"
               variant="outline"
               onClick={(e) => {
                 e.stopPropagation();
@@ -204,7 +204,7 @@ function SnagRow({ snag, onClick, onStatusChange }: SnagRowProps) {
               Resolve
             </Button>
             <Button
-              size="xs"
+              size="sm"
               variant="ghost"
               onClick={(e) => {
                 e.stopPropagation();

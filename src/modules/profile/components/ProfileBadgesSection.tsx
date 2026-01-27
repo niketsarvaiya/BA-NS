@@ -57,7 +57,7 @@ const CATEGORY_ACCENTS: Record<
   },
 };
 
-function getCategoryIcon(category: BadgeCategory): JSX.Element {
+function getCategoryIcon(category: BadgeCategory): React.ReactNode {
   switch (category) {
     case "TENURE_COMMITMENT":
       return <GraduationCap className="h-4 w-4" />;

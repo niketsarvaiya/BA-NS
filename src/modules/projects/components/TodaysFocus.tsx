@@ -75,7 +75,7 @@ export function TodaysFocus({
                   <Button
                     type="button"
                     variant="outline"
-                    size="xs"
+                    size="sm"
                     onClick={actionButtons[0]?.onClick}
                     className="h-7 gap-1 px-2 text-[11px]"
                   >
