@@ -357,7 +357,7 @@ export default function SiteBOQPage() {
                                   }
                                   acc[roomKey].push(unit);
                                   return acc;
-                                }, {} as Record<string, typeof item.units>)
+                                }, {} as Record<string, NonNullable<typeof item.units>>)
                               ).map(([roomName, units]) => (
                                 <div key={roomName} className="ml-8">
                                   <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100 mb-2">
