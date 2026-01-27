@@ -1,0 +1,243 @@
+import type { TaskTemplate } from "../types";
+
+// ⚠️ TODO (Backend):
+// Replace this file with API-driven task templates from /api/task-templates
+// This is a temporary frontend mock for V1 development
+
+export const taskTemplates: TaskTemplate[] = [
+  // Controls
+  {
+    id: "tpl-keypad-install",
+    productCategory: "Controls",
+    productSubCategory: "Keypads",
+    stakeholder: "ELECTRICIAN",
+    title: "Install keypad",
+    description: "Mount and wire keypad control panel",
+    priority: "MEDIUM",
+  },
+  {
+    id: "tpl-keypad-program",
+    productCategory: "Controls",
+    productSubCategory: "Keypads",
+    stakeholder: "PROGRAMMER",
+    title: "Program keypad scenes",
+    description: "Configure button assignments and scene triggers",
+    priority: "MEDIUM",
+  },
+  {
+    id: "tpl-touch-panel-install",
+    productCategory: "Controls",
+    productSubCategory: "Touch Panels",
+    stakeholder: "ELECTRICIAN",
+    title: "Install touch panel",
+    description: "Mount touch panel and establish network connection",
+    priority: "HIGH",
+  },
+  {
+    id: "tpl-touch-panel-program",
+    productCategory: "Controls",
+    productSubCategory: "Touch Panels",
+    stakeholder: "PROGRAMMER",
+    title: "Program touch panel interface",
+    description: "Configure UI, scenes, and control logic",
+    priority: "HIGH",
+    isBlocking: true,
+  },
+
+  // Lighting
+  {
+    id: "tpl-light-install",
+    productCategory: "Lighting",
+    stakeholder: "ELECTRICIAN",
+    title: "Install lighting fixture",
+    description: "Mount and wire lighting fixture",
+    priority: "MEDIUM",
+  },
+  {
+    id: "tpl-dimmer-install",
+    productCategory: "Lighting",
+    productSubCategory: "Dimmers",
+    stakeholder: "ELECTRICIAN",
+    title: "Install dimmer module",
+    description: "Install and wire dimmer in DB panel",
+    priority: "MEDIUM",
+  },
+  {
+    id: "tpl-lighting-test",
+    productCategory: "Lighting",
+    stakeholder: "QC",
+    title: "Test lighting system",
+    description: "Verify all lights function correctly with dimmers",
+    priority: "HIGH",
+  },
+
+  // Audio Visual
+  {
+    id: "tpl-projector-install",
+    productCategory: "Audio Visual",
+    productSubCategory: "Projectors",
+    stakeholder: "INSTALLER",
+    title: "Install projector",
+    description: "Mount projector and connect video/power cables",
+    priority: "HIGH",
+    isBlocking: true,
+  },
+  {
+    id: "tpl-projector-calibrate",
+    productCategory: "Audio Visual",
+    productSubCategory: "Projectors",
+    stakeholder: "INSTALLER",
+    title: "Calibrate projector",
+    description: "Adjust focus, keystone, and color settings",
+    priority: "MEDIUM",
+  },
+  {
+    id: "tpl-speaker-install",
+    productCategory: "Audio Visual",
+    productSubCategory: "Speakers",
+    stakeholder: "INSTALLER",
+    title: "Install speakers",
+    description: "Mount speakers and run audio cables",
+    priority: "MEDIUM",
+  },
+  {
+    id: "tpl-avr-install",
+    productCategory: "Audio Visual",
+    productSubCategory: "Receivers",
+    stakeholder: "INSTALLER",
+    title: "Install AV receiver",
+    description: "Rack mount AVR and connect all audio/video sources",
+    priority: "HIGH",
+  },
+  {
+    id: "tpl-av-test",
+    productCategory: "Audio Visual",
+    stakeholder: "QC",
+    title: "Test AV system",
+    description: "Verify audio/video quality and surround sound",
+    priority: "HIGH",
+  },
+
+  // Curtains & Blinds
+  {
+    id: "tpl-curtain-install",
+    productCategory: "Curtains & Blinds",
+    stakeholder: "CARPENTER",
+    title: "Install curtain motor",
+    description: "Mount motor and install curtain track",
+    priority: "MEDIUM",
+  },
+  {
+    id: "tpl-curtain-program",
+    productCategory: "Curtains & Blinds",
+    stakeholder: "PROGRAMMER",
+    title: "Program curtain limits",
+    description: "Set open/close limits and calibrate motor",
+    priority: "LOW",
+  },
+
+  // Security
+  {
+    id: "tpl-camera-install",
+    productCategory: "Security",
+    productSubCategory: "Cameras",
+    stakeholder: "INSTALLER",
+    title: "Install CCTV camera",
+    description: "Mount camera and run network/power cables",
+    priority: "HIGH",
+  },
+  {
+    id: "tpl-nvr-setup",
+    productCategory: "Security",
+    productSubCategory: "Recorders",
+    stakeholder: "INSTALLER",
+    title: "Setup NVR",
+    description: "Configure NVR, add cameras, set recording schedules",
+    priority: "HIGH",
+    isBlocking: true,
+  },
+  {
+    id: "tpl-door-lock-install",
+    productCategory: "Security",
+    productSubCategory: "Locks",
+    stakeholder: "CARPENTER",
+    title: "Install smart lock",
+    description: "Install smart door lock and configure access codes",
+    priority: "MEDIUM",
+  },
+
+  // Networking
+  {
+    id: "tpl-switch-install",
+    productCategory: "Networking",
+    productSubCategory: "Switches",
+    stakeholder: "INSTALLER",
+    title: "Install network switch",
+    description: "Rack mount switch and configure VLANs",
+    priority: "HIGH",
+    isBlocking: true,
+  },
+  {
+    id: "tpl-wifi-install",
+    productCategory: "Networking",
+    productSubCategory: "WiFi",
+    stakeholder: "INSTALLER",
+    title: "Install WiFi access point",
+    description: "Mount AP and configure wireless network",
+    priority: "MEDIUM",
+  },
+  {
+    id: "tpl-network-test",
+    productCategory: "Networking",
+    stakeholder: "QC",
+    title: "Test network connectivity",
+    description: "Verify network speeds and coverage",
+    priority: "HIGH",
+  },
+
+  // HVAC
+  {
+    id: "tpl-thermostat-install",
+    productCategory: "HVAC",
+    stakeholder: "ELECTRICIAN",
+    title: "Install smart thermostat",
+    description: "Install thermostat and wire to HVAC system",
+    priority: "MEDIUM",
+  },
+  {
+    id: "tpl-hvac-integrate",
+    productCategory: "HVAC",
+    stakeholder: "PROGRAMMER",
+    title: "Integrate HVAC with automation",
+    description: "Add HVAC control to automation system",
+    priority: "LOW",
+  },
+];
+
+// System-level tasks (not tied to BOQ items)
+export const systemTasks: Omit<TaskTemplate, "productCategory">[] = [
+  {
+    id: "tpl-system-boq-finalize",
+    stakeholder: "SITE_SUPERVISOR",
+    title: "Finalize BOQ",
+    description: "Complete and approve bill of quantities",
+    priority: "HIGH",
+    isBlocking: true,
+  },
+  {
+    id: "tpl-system-site-ready",
+    stakeholder: "SITE_SUPERVISOR",
+    title: "Confirm site readiness",
+    description: "Verify site is ready for installation work",
+    priority: "HIGH",
+    isBlocking: true,
+  },
+  {
+    id: "tpl-system-qc-handover",
+    stakeholder: "QC",
+    title: "QC completed & handover done",
+    description: "Final quality check and project handover",
+    priority: "HIGH",
+    isBlocking: true,
+  },
+];
