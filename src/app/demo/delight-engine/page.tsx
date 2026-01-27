@@ -178,7 +178,7 @@ export default function DelightEngineDemoPage() {
               />
             )}
             <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              {showCelebration ? "🎉 Celebration in progress..." : "Click a button to see celebration here"}
+              {showCelebration ? "Celebration in progress..." : "Click a button to see celebration here"}
             </p>
           </div>
         </div>
