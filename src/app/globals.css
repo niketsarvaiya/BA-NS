@@ -47,62 +47,124 @@
   --radius-4xl: calc(var(--radius) + 16px);
 }
 
+/* Beyond Neo – dark, layered, premium visual mode.
+   Applied whenever the root element has the .dark class
+   (ThemeProvider adds .dark + .theme-neo for the Neo mode).
+*/
 .dark {
-  /* DARK MODE - Beyond Assist Design System */
-  --background: #0E1116;
-  --foreground: #E5E7EB;
-  --card: #161A22;
-  --card-foreground: #E5E7EB;
-  --popover: #161A22;
-  --popover-foreground: #E5E7EB;
-  
-  /* Primary Action Blue */
-  --primary: #3B82F6;
-  --primary-foreground: #FFFFFF;
-  
-  /* Success Green */
-  --success: #22C55E;
-  --success-foreground: #FFFFFF;
-  
-  /* Warning Amber */
-  --warning: #F59E0B;
-  --warning-foreground: #000000;
-  
-  /* Destructive (rare use) */
-  --destructive: #EF4444;
-  --destructive-foreground: #FFFFFF;
-  
-  /* Secondary & Muted */
-  --secondary: #1F2937;
-  --secondary-foreground: #E5E7EB;
-  --muted: #1F2937;
-  --muted-foreground: #9CA3AF;
-  
-  /* Accent (same as primary for consistency) */
-  --accent: #3B82F6;
-  --accent-foreground: #FFFFFF;
-  
-  /* Borders & Inputs */
-  --border: #2A2F3A;
-  --input: #2A2F3A;
-  --ring: #3B82F6;
-  
+  /* Base surfaces */
+  --background: #020617; /* slate-950 base */
+  --foreground: #e5e7eb;
+
+  /* Cards & overlays – slightly translucent, layered */
+  --card: rgba(15, 23, 42, 0.92);
+  --card-foreground: #e5e7eb;
+  --popover: rgba(15, 23, 42, 0.96);
+  --popover-foreground: #e5e7eb;
+
+  /* Primary Action Blue – a touch more luminous than Calm */
+  --primary: #60a5fa; /* sky-400 */
+  --primary-foreground: #020617;
+
+  /* Success / Warning / Destructive – tuned for dark surfaces */
+  --success: #22c55e;
+  --success-foreground: #022c22;
+
+  --warning: #fbbf24;
+  --warning-foreground: #111827;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #fef2f2;
+
+  /* Secondary & Muted surfaces */
+  --secondary: rgba(15, 23, 42, 0.86);
+  --secondary-foreground: #e5e7eb;
+  --muted: rgba(15, 23, 42, 0.86);
+  --muted-foreground: #9ca3af;
+
+  /* Accent – restrained, reusing the primary hue */
+  --accent: #38bdf8; /* sky-400/500 blend */
+  --accent-foreground: #0b1120;
+
+  /* Borders & Inputs – soft, not harsh */
+  --border: rgba(148, 163, 184, 0.36);
+  --input: rgba(15, 23, 42, 0.96);
+  --ring: #38bdf8;
+
   /* Charts (muted, professional) */
-  --chart-1: #60A5FA;
-  --chart-2: #34D399;
-  --chart-3: #FBBF24;
-  --chart-4: #A78BFA;
-  --chart-5: #F472B6;
-  
+  --chart-1: #60a5fa;
+  --chart-2: #34d399;
+  --chart-3: #facc15;
+  --chart-4: #a855f7;
+  --chart-5: #f472b6;
+
   /* Sidebar */
-  --sidebar: #161A22;
-  --sidebar-foreground: #E5E7EB;
-  --sidebar-primary: #3B82F6;
-  --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #1F2937;
-  --sidebar-accent-foreground: #E5E7EB;
-  --sidebar-border: #2A2F3A;
-  --sidebar-ring: #3B82F6;
+  --sidebar: rgba(15, 23, 42, 0.96);
+  --sidebar-foreground: #e5e7eb;
+  --sidebar-primary: #60a5fa;
+  --sidebar-primary-foreground: #020617;
+  --sidebar-accent: rgba(15, 23, 42, 0.86);
+  --sidebar-accent-foreground: #e5e7eb;
+  --sidebar-border: rgba(148, 163, 184, 0.36);
+  --sidebar-ring: #38bdf8;
+}
+
+/* Beyond Neo specific surface + interaction refinements */
+html.theme-neo body {
+  /* Dark, layered background with subtle gradients. */
+  background-color: #020617;
+  background-image:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.22), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(129, 140, 248, 0.22), transparent 55%),
+    radial-gradient(circle at top, rgba(15, 23, 42, 0.9), #020617 70%);
+  background-attachment: fixed;
+}
+
+html.theme-neo .bg-card {
+  /* Card surfaces: subtle translucency + inner highlight */
+  background-color: rgba(15, 23, 42, 0.92);
+  background-image:
+    radial-gradient(circle at top left, rgba(248, 250, 252, 0.06), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(15, 23, 42, 0.9), transparent 60%);
+  backdrop-filter: blur(24px);
+  border-color: rgba(148, 163, 184, 0.36);
+}
+
+html.theme-neo .border-border {
+  border-color: rgba(148, 163, 184, 0.36);
+}
+
+/* Inputs and focused elements – soft glow */
+html.theme-neo :is(input, textarea, select, button, [role="tab"]) {
+  transition: box-shadow 150ms ease-out, transform 150ms ease-out;
+}
+
+html.theme-neo :is(input, textarea, select, button, [role="tab"]):focus-visible {
+  box-shadow:
+    0 0 0 1px rgba(56, 189, 248, 0.7),
+    0 0 0 10px rgba(56, 189, 248, 0.18);
+}
+
+/* Active tabs – thin luminous accent line */
+html.theme-neo [role="tab"] {
+  position: relative;
+}
+
+html.theme-neo [role="tab"][data-state="active"]::after {
+  content: "";
+  position: absolute;
+  left: 18%;
+  right: 18%;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 999px;
+  background: radial-gradient(circle at center, rgba(56, 189, 248, 0.9), transparent 70%);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.8);
+}
+
+/* Hover states – smooth, premium without being flashy */
+html.theme-neo .transition-smooth:hover {
+  transform: translateY(-0.5px);
 }
 
 body {

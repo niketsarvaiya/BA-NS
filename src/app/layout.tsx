@@ -24,27 +24,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var theme = localStorage.getItem('beyond-assist-theme') || 'dark';
-                  document.documentElement.classList.remove('dark', 'light');
-                  document.documentElement.classList.add(theme);
-                } catch (e) {}
-              })();
-            `,
-          }}
-        />
-      </head>
+    <html lang="en" className="light" suppressHydrationWarning>
+      <head />
       <body
         className={`${inter.variable} antialiased bg-background text-foreground`}
       >
-        <ThemeProvider>
-          <AuthProvider>
+        <AuthProvider>
+          <ThemeProvider>
             {/* Notes + Chat + Delight providers keep state consistent across app routes. */}
             <NotesProvider>
               <GlobalChatProvider>
@@ -53,8 +39,8 @@ export default function RootLayout({
                 </DelightEngineProvider>
               </GlobalChatProvider>
             </NotesProvider>
-          </AuthProvider>
-        </ThemeProvider>
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

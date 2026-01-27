@@ -9,9 +9,8 @@ import {
   ChevronDown,
   LogOut,
   User,
-  Sun,
-  Moon,
   MessageCircle,
+  Sparkles,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/modules/auth/context/AuthContext";
@@ -19,10 +18,10 @@ import { useRequireAuth } from "@/modules/auth/utils/guards";
 import { primaryNav, filterNavByRole, useActivePath } from "../utils/navigation";
 import type { NavItem } from "../types";
 import { Button } from "@/components/ui/button";
-import { useTheme } from "@/providers/ThemeProvider";
 import { GlobalNoteComposer } from "@/modules/notes/components/GlobalNoteComposer";
 import { GlobalChatUI } from "@/modules/global-chat/components/GlobalChatUI";
 import { useGlobalChat } from "@/modules/global-chat/context/GlobalChatContext";
+import { useTheme } from "@/providers/ThemeProvider";
 
 interface AppShellProps {
   children: React.ReactNode;
@@ -31,7 +30,6 @@ interface AppShellProps {
 export function AppShell({ children }: AppShellProps) {
   const { authorized, loading } = useRequireAuth();
   const { user, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const router = useRouter();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -57,8 +55,9 @@ export function AppShell({ children }: AppShellProps) {
 
   const navItems = filterNavByRole(primaryNav, user?.role ?? null);
 
+  // Core section: include Dashboard, Field, and Projects in the main stack.
   const coreItems = navItems.filter((item) =>
-    ["Dashboard", "Projects"].includes(item.label)
+    ["Dashboard", "Field", "Projects"].includes(item.label)
   );
   const projectsItem = navItems.find((item) => item.label === "Projects");
   const workspaceItems = projectsItem?.children ?? [];
@@ -77,28 +76,28 @@ export function AppShell({ children }: AppShellProps) {
     <div className="min-h-screen flex bg-background text-foreground">
       {/* Desktop sidebar */}
       <aside
-        className={`hidden md:flex flex-col border-r border-zinc-200 dark:border-zinc-800/60 bg-white dark:bg-zinc-950/70 backdrop-blur-xl transition-all duration-200 ${
+        className={`hidden md:flex flex-col border-r border-border bg-card backdrop-blur-xl transition-all duration-200 ${
           sidebarCollapsed ? "w-[76px]" : "w-64"
         }`}
       >
-        <div className="flex items-center justify-between px-4 h-14 border-b border-zinc-200 dark:border-zinc-800/60">
+        <div className="flex items-center justify-between px-4 h-14 border-b border-border">
           <div className="flex items-center gap-3 overflow-hidden">
             <div className="h-8 w-8 rounded-lg bg-primary/15 flex items-center justify-center shadow-sm">
               <span className="text-primary font-semibold text-sm">BA</span>
             </div>
             {!sidebarCollapsed && (
               <div className="flex flex-col leading-tight">
-                <span className="font-semibold text-sm tracking-tight">
+                <span className="font-semibold text-sm tracking-tight text-foreground">
                   Beyond Assist
                 </span>
-                <span className="text-[11px] text-zinc-400 dark:text-zinc-400">Operations OS</span>
+                <span className="text-[11px] text-muted-foreground">Operations OS</span>
               </div>
             )}
           </div>
           <button
             type="button"
             onClick={() => setSidebarCollapsed((v) => !v)}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-zinc-400 dark:text-zinc-400 hover:text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-700 focus:ring-offset-2 focus:ring-offset-slate-950"
+            className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background transition-smooth"
           >
             {sidebarCollapsed ? <Menu className="h-4 w-4" /> : <X className="h-4 w-4" />}
           </button>
@@ -107,7 +106,7 @@ export function AppShell({ children }: AppShellProps) {
         <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5 text-xs">
           <div>
             {!sidebarCollapsed && (
-              <p className="px-1 mb-1.5 text-[11px] font-medium uppercase tracking-wide text-zinc-900 dark:text-zinc-500">
+              <p className="px-1 mb-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                 Core
               </p>
             )}
@@ -129,7 +128,7 @@ export function AppShell({ children }: AppShellProps) {
               <button
                 type="button"
                 onClick={() => setShowWorkspace((v) => !v)}
-                className="flex w-full items-center justify-between px-1 text-[11px] font-medium uppercase tracking-wide text-zinc-900 dark:text-zinc-500 hover:text-zinc-600 dark:text-zinc-300 transition-colors"
+                className="flex w-full items-center justify-between px-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-smooth"
               >
                 <span>Project Workspace</span>
                 <ChevronDown
@@ -158,7 +157,7 @@ export function AppShell({ children }: AppShellProps) {
           {!!adminItems.length && (
             <div>
               {!sidebarCollapsed && (
-                <p className="px-1 mb-1.5 text-[11px] font-medium uppercase tracking-wide text-zinc-900 dark:text-zinc-500">
+                <p className="px-1 mb-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                   Admin
                 </p>
               )}
@@ -177,7 +176,7 @@ export function AppShell({ children }: AppShellProps) {
           )}
         </nav>
 
-        <div className="border-t border-zinc-300 dark:border-zinc-800/60 px-3 py-3">
+        <div className="border-t border-border px-3 py-3">
           <SidebarUserFooter
             name={user?.name}
             role={user?.role}
@@ -194,23 +193,23 @@ export function AppShell({ children }: AppShellProps) {
             className="fixed inset-0 bg-black/50"
             onClick={() => setMobileOpen(false)}
           />
-          <aside className="relative z-50 flex w-72 flex-col border-r border-zinc-300 dark:border-zinc-800/60 bg-zinc-50 dark:bg-zinc-950/95 backdrop-blur-xl">
-            <div className="flex items-center justify-between px-4 h-14 border-b border-zinc-300 dark:border-zinc-800/60">
+          <aside className="relative z-50 flex w-72 flex-col border-r border-border bg-card backdrop-blur-xl">
+            <div className="flex items-center justify-between px-4 h-14 border-b border-border">
               <div className="flex items-center gap-3">
                 <div className="h-8 w-8 rounded-lg bg-primary/15 flex items-center justify-center shadow-sm">
                   <span className="text-primary font-semibold text-sm">BA</span>
                 </div>
                 <div className="flex flex-col leading-tight">
-                  <span className="font-semibold text-sm tracking-tight">
+                  <span className="font-semibold text-sm tracking-tight text-foreground">
                     Beyond Assist
                   </span>
-                  <span className="text-[11px] text-zinc-400 dark:text-zinc-400">Operations OS</span>
+                  <span className="text-[11px] text-muted-foreground">Operations OS</span>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setMobileOpen(false)}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-md text-zinc-400 dark:text-zinc-400 hover:text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-700 focus:ring-offset-2 focus:ring-offset-slate-950"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background transition-smooth"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -218,7 +217,7 @@ export function AppShell({ children }: AppShellProps) {
 
             <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5 text-xs">
               <div>
-                <p className="px-1 mb-1.5 text-[11px] font-medium uppercase tracking-wide text-zinc-900 dark:text-zinc-500">
+                <p className="px-1 mb-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                   Core
                 </p>
                 <div className="space-y-1">
@@ -242,7 +241,7 @@ export function AppShell({ children }: AppShellProps) {
                   <button
                     type="button"
                     onClick={() => setShowWorkspace((v) => !v)}
-                    className="flex w-full items-center justify-between px-1 text-[11px] font-medium uppercase tracking-wide text-zinc-900 dark:text-zinc-500 hover:text-zinc-600 dark:text-zinc-300 transition-colors"
+                    className="flex w-full items-center justify-between px-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground hover:text-foreground transition-smooth"
                   >
                     <span>Project Workspace</span>
                     <ChevronDown
@@ -273,7 +272,7 @@ export function AppShell({ children }: AppShellProps) {
 
               {!!adminItems.length && (
                 <div>
-                  <p className="px-1 mb-1.5 text-[11px] font-medium uppercase tracking-wide text-zinc-900 dark:text-zinc-500">
+                  <p className="px-1 mb-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
                     Admin
                   </p>
                   <div className="space-y-1">
@@ -299,24 +298,24 @@ export function AppShell({ children }: AppShellProps) {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0 relative">
-        <header className="sticky top-0 z-30 border-b border-zinc-300 dark:border-zinc-800/60 bg-white dark:bg-slate-950/80 backdrop-blur-xl">
+        <header className="sticky top-0 z-30 border-b border-border bg-card backdrop-blur-xl">
           <div className="flex h-14 items-center gap-3 px-3 md:px-5">
             {/* Mobile menu button */}
             <button
               type="button"
               onClick={() => setMobileOpen(true)}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md text-zinc-400 dark:text-zinc-400 hover:text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:bg-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-700 focus:ring-offset-2 focus:ring-offset-slate-950 md:hidden"
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background transition-smooth md:hidden"
             >
               <Menu className="h-4 w-4" />
             </button>
 
             {/* Left: breadcrumb */}
             <div className="flex items-center gap-2 min-w-0">
-              <span className="text-[11px] uppercase tracking-wide text-zinc-900 dark:text-zinc-500">
+              <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
                 Overview
               </span>
-              <span className="h-3 w-px bg-zinc-200 dark:bg-zinc-800" />
-              <p className="truncate text-sm font-medium text-zinc-800 dark:text-zinc-100">
+              <span className="h-3 w-px bg-border" />
+              <p className="truncate text-sm font-medium text-foreground">
                 {currentLabel}
               </p>
             </div>
@@ -325,12 +324,12 @@ export function AppShell({ children }: AppShellProps) {
             <div className="flex-1 flex justify-center">
               <button
                 type="button"
-                className="inline-flex items-center gap-2 rounded-full border border-zinc-300 dark:border-zinc-800 bg-zinc-900/80 px-3 py-1.5 text-xs text-zinc-700 dark:text-zinc-200 shadow-sm hover:bg-zinc-200 dark:bg-zinc-800 hover:border-zinc-300 dark:border-zinc-700 transition-colors"
+                className="inline-flex items-center gap-2 rounded-full border border-border bg-muted px-3 py-1.5 text-xs text-foreground shadow-sm hover:bg-accent hover:border-primary/40 transition-smooth"
               >
                 <span className="truncate max-w-[140px] md:max-w-[200px]">
                   Current Project (placeholder)
                 </span>
-                <ChevronDown className="h-3.5 w-3.5 text-zinc-900 dark:text-zinc-500" />
+                <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
               </button>
             </div>
 
@@ -339,11 +338,11 @@ export function AppShell({ children }: AppShellProps) {
               <Button
                 variant="outline"
                 size="sm"
-                className="hidden sm:inline-flex h-8 rounded-full border-zinc-300 dark:border-zinc-700 bg-zinc-900/60 text-xs text-zinc-700 dark:text-zinc-200 hover:bg-zinc-200 dark:bg-zinc-800/80 hover:-translate-y-px transition-transform transition-colors duration-150"
+                className="hidden sm:inline-flex h-8 rounded-full text-xs hover:-translate-y-px transition-all duration-150"
               >
                 <Search className="mr-1.5 h-3.5 w-3.5" />
                 <span>Search</span>
-                <span className="ml-2 rounded-full bg-zinc-200 dark:bg-zinc-800 px-1.5 py-0.5 text-[10px] text-zinc-400 dark:text-zinc-400">
+                <span className="ml-2 rounded-full bg-muted px-1.5 py-0.5 text-[10px] text-muted-foreground">
                   Cmd K
                 </span>
               </Button>
@@ -351,22 +350,8 @@ export function AppShell({ children }: AppShellProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={toggleTheme}
-                className="h-8 w-8 rounded-full text-zinc-400 dark:text-zinc-400 hover:text-zinc-800 dark:text-zinc-100 hover:bg-zinc-900/70 transition-colors"
-                aria-label="Toggle theme"
-              >
-                {theme === "dark" ? (
-                  <Sun className="h-4 w-4" />
-                ) : (
-                  <Moon className="h-4 w-4" />
-                )}
-              </Button>
-
-              <Button
-                variant="ghost"
-                size="icon"
                 onClick={toggleMessagingPanel}
-                className="relative h-8 w-8 rounded-full text-zinc-400 dark:text-zinc-400 hover:text-zinc-800 dark:text-zinc-100 hover:bg-zinc-900/70 transition-colors"
+                className="relative h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-smooth"
                 aria-label={isMessagingOpen ? "Close messaging" : "Open messaging"}
               >
                 <MessageCircle className="h-4 w-4" />
@@ -380,10 +365,13 @@ export function AppShell({ children }: AppShellProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-8 w-8 rounded-full text-zinc-400 dark:text-zinc-400 hover:text-zinc-800 dark:text-zinc-100 hover:bg-zinc-900/70 transition-colors"
+                className="h-8 w-8 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted transition-smooth"
               >
                 <Bell className="h-4 w-4" />
               </Button>
+
+              {/* Optional quick Beyond Calm / Beyond Neo toggle */}
+              <ThemeQuickToggle />
 
               <ProfileMenu
                 userName={user?.name}
@@ -394,12 +382,9 @@ export function AppShell({ children }: AppShellProps) {
           </div>
         </header>
 
-        <main className="flex-1 min-h-0 overflow-y-auto">
-          <div className="relative">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(244,244,245,0.10),_transparent_55%)]" />
-            <div className="relative mx-auto w-full max-w-7xl px-4 py-6 md:px-6 lg:px-8">
-              {children}
-            </div>
+        <main className="flex-1 min-h-0 overflow-y-auto bg-background">
+          <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-6 lg:px-8">
+            {children}
           </div>
         </main>
 
@@ -458,16 +443,18 @@ function SidebarItem({ item, collapsed, active, onNavigate, sub = false }: Sideb
         onClick={() => onNavigate(item.href)}
         className={`relative group flex w-full items-center gap-2 rounded-lg px-2.5 py-1.5 ${
           sub ? "text-[11px]" : "text-xs"
-        } font-medium transition-colors duration-150 ${
+        } font-medium transition-smooth ${
           active
-            ? "bg-zinc-900/90 text-zinc-900 dark:text-zinc-50 shadow-[0_0_0_1px_rgba(113,113,122,0.7)]"
-            : "text-zinc-400 dark:text-zinc-400 hover:bg-zinc-900/70 hover:text-zinc-800 dark:text-zinc-100"
+            ? "bg-primary/10 text-foreground border border-primary/20"
+            : "text-muted-foreground hover:bg-muted hover:text-foreground"
         }`}
       >
         {active && (
           <span className="absolute left-0 top-1 bottom-1 w-[3px] rounded-full bg-primary" />
         )}
-        <span className={`inline-flex items-center justify-center rounded-md bg-zinc-100 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-400 group-hover:text-zinc-800 dark:text-zinc-100 ${
+        <span className={`inline-flex items-center justify-center rounded-md ${
+          active ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground group-hover:text-foreground"
+        } ${
           sub ? "h-6 w-6" : "h-7 w-7"
         }`}>
           <Icon className={sub ? "h-3.5 w-3.5" : "h-4 w-4"} />
@@ -486,9 +473,24 @@ interface ProfileMenuProps {
   onLogout: () => void;
 }
 
+function getRoleLabel(role?: string) {
+  if (!role) return "";
+  const map: Record<string, string> = {
+    admin: "Admin",
+    supervisor: "Supervisor",
+    technician: "Installer",
+    programmer: "Programmer",
+    qc: "QC",
+    store: "Store",
+  };
+  return map[role] ?? role;
+}
+
 function ProfileMenu({ userName, role, onLogout }: ProfileMenuProps) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+
+  const roleLabel = getRoleLabel(role);
 
   return (
     <div className="relative">
@@ -504,9 +506,9 @@ function ProfileMenu({ userName, role, onLogout }: ProfileMenuProps) {
           <span className="text-xs font-medium truncate max-w-[120px]">
             {userName ?? "User"}
           </span>
-          {role && (
+          {roleLabel && (
             <span className="text-[10px] uppercase tracking-wide text-muted-foreground">
-              {role}
+              {roleLabel}
             </span>
           )}
         </span>
@@ -514,10 +516,10 @@ function ProfileMenu({ userName, role, onLogout }: ProfileMenuProps) {
       </button>
 
       {open && (
-        <div className="absolute right-0 z-50 mt-1 w-40 rounded-md border border-zinc-300 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 p-1 text-xs shadow-lg">
+        <div className="absolute right-0 z-50 mt-1 w-40 rounded-md border border-border bg-card p-1 text-xs shadow-lg">
           <button
             type="button"
-            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-zinc-800 dark:text-zinc-100 hover:bg-zinc-100 dark:bg-zinc-900"
+            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-foreground hover:bg-muted transition-smooth"
             onClick={() => {
               setOpen(false);
               router.push("/profile");
@@ -528,7 +530,7 @@ function ProfileMenu({ userName, role, onLogout }: ProfileMenuProps) {
           </button>
           <button
             type="button"
-            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-red-400 hover:bg-red-950/40"
+            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-red-500 dark:text-red-400 hover:bg-red-500/10 transition-smooth"
             onClick={() => {
               setOpen(false);
               onLogout();
@@ -550,8 +552,31 @@ interface SidebarUserFooterProps {
   onLogout: () => void;
 }
 
+function ThemeQuickToggle() {
+  const { theme, toggleTheme } = useTheme();
+  const isNeo = theme === "neo";
+
+  return (
+    <button
+      type="button"
+      onClick={toggleTheme}
+      className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-2.5 text-[11px] text-muted-foreground shadow-sm hover:text-foreground hover:border-primary/50 hover:bg-accent/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background transition-smooth"
+      aria-label={isNeo ? "Switch to Beyond Calm" : "Switch to Beyond Neo"}
+    >
+      <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-muted text-[11px]">
+        <Sparkles className="h-3 w-3" />
+      </span>
+      <span className="hidden sm:inline">
+        {isNeo ? "Beyond Neo" : "Beyond Calm"}
+      </span>
+      <span className="inline sm:hidden">{isNeo ? "Neo" : "Calm"}</span>
+    </button>
+  );
+}
+
 function SidebarUserFooter({ name, role, collapsed, onLogout }: SidebarUserFooterProps) {
   const initial = name?.charAt(0).toUpperCase() ?? "U";
+  const roleLabel = getRoleLabel(role);
 
   if (collapsed) {
     return (
@@ -559,7 +584,7 @@ function SidebarUserFooter({ name, role, collapsed, onLogout }: SidebarUserFoote
         <button
           type="button"
           onClick={onLogout}
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300 hover:bg-zinc-200 dark:bg-zinc-800 hover:text-zinc-900 dark:text-zinc-50 transition-colors"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-muted text-muted-foreground hover:bg-accent hover:text-foreground transition-smooth"
         >
           <LogOut className="h-4 w-4" />
         </button>
@@ -568,18 +593,18 @@ function SidebarUserFooter({ name, role, collapsed, onLogout }: SidebarUserFoote
   }
 
   return (
-    <div className="flex items-center justify-between gap-2 rounded-lg bg-zinc-900/80 px-2.5 py-2 shadow-sm">
+    <div className="flex items-center justify-between gap-2 rounded-lg bg-muted px-2.5 py-2 shadow-sm">
       <div className="flex items-center gap-2 min-w-0">
         <div className="h-8 w-8 rounded-full bg-primary/15 text-primary flex items-center justify-center text-xs font-semibold">
           {initial}
         </div>
         <div className="flex flex-col leading-tight min-w-0">
-          <span className="truncate text-xs font-medium text-zinc-800 dark:text-zinc-100">
+          <span className="truncate text-xs font-medium text-foreground">
             {name ?? "User"}
           </span>
-          {role && (
-            <span className="text-[11px] uppercase tracking-wide text-zinc-900 dark:text-zinc-500">
-              {role}
+          {roleLabel && (
+            <span className="text-[11px] uppercase tracking-wide text-muted-foreground">
+              {roleLabel}
             </span>
           )}
         </div>
@@ -587,7 +612,7 @@ function SidebarUserFooter({ name, role, collapsed, onLogout }: SidebarUserFoote
       <button
         type="button"
         onClick={onLogout}
-        className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-zinc-400 dark:text-zinc-400 hover:text-zinc-800 dark:text-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 transition-colors"
+        className="inline-flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-accent transition-smooth"
         aria-label="Sign out"
       >
         <LogOut className="h-3.5 w-3.5" />

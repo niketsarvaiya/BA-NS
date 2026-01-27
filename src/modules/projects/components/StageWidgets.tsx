@@ -41,7 +41,7 @@ function DesignStageWidgets({ data }: { data: StageWidgetsProps["data"] }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {/* Design Approval Progress */}
-      <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-6">
+      <div className="rounded-lg border border-border bg-card p-6">
         <div className="flex items-center gap-2 mb-4">
           <FileText className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           <h4 className="font-semibold text-zinc-900 dark:text-zinc-50">
@@ -72,7 +72,7 @@ function DesignStageWidgets({ data }: { data: StageWidgetsProps["data"] }) {
       </div>
 
       {/* Drawings Status */}
-      <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-6">
+      <div className="rounded-lg border border-border bg-card p-6">
         <div className="flex items-center gap-2 mb-4">
           <ClipboardCheck className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
           <h4 className="font-semibold text-zinc-900 dark:text-zinc-50">
@@ -110,7 +110,7 @@ function AuditStageWidgets({ data }: { data: StageWidgetsProps["data"] }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {/* Audit Schedule */}
-      <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-6">
+      <div className="rounded-lg border border-border bg-card p-6">
         <div className="flex items-center gap-2 mb-4">
           <ClipboardCheck className="h-5 w-5 text-purple-600 dark:text-purple-400" />
           <h4 className="font-semibold text-zinc-900 dark:text-zinc-50">
@@ -141,7 +141,7 @@ function AuditStageWidgets({ data }: { data: StageWidgetsProps["data"] }) {
       </div>
 
       {/* Findings Resolution */}
-      <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-6">
+      <div className="rounded-lg border border-border bg-card p-6">
         <div className="flex items-center gap-2 mb-4">
           <FileText className="h-5 w-5 text-red-600 dark:text-red-400" />
           <h4 className="font-semibold text-zinc-900 dark:text-zinc-50">
@@ -172,7 +172,7 @@ function ExecutionStageWidgets({ data }: { data: StageWidgetsProps["data"] }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {/* Task Completion */}
-      <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-6">
+      <div className="rounded-lg border border-border bg-card p-6">
         <div className="flex items-center gap-2 mb-4">
           <Hammer className="h-5 w-5 text-orange-600 dark:text-orange-400" />
           <h4 className="font-semibold text-zinc-900 dark:text-zinc-50">
@@ -201,7 +201,7 @@ function ExecutionStageWidgets({ data }: { data: StageWidgetsProps["data"] }) {
       </div>
 
       {/* Site Coverage */}
-      <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-6">
+      <div className="rounded-lg border border-border bg-card p-6">
         <div className="flex items-center gap-2 mb-4">
           <ClipboardCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
           <h4 className="font-semibold text-zinc-900 dark:text-zinc-50">
@@ -224,7 +224,7 @@ function ExecutionStageWidgets({ data }: { data: StageWidgetsProps["data"] }) {
       </div>
 
       {/* QC Inspections */}
-      <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-6">
+      <div className="rounded-lg border border-border bg-card p-6">
         <div className="flex items-center gap-2 mb-4">
           <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
           <h4 className="font-semibold text-zinc-900 dark:text-zinc-50">
@@ -250,7 +250,7 @@ function QCHandoverStageWidgets({ data }: { data: StageWidgetsProps["data"] }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {/* Documentation Progress */}
-      <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-6">
+      <div className="rounded-lg border border-border bg-card p-6">
         <div className="flex items-center gap-2 mb-4">
           <FileText className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
           <h4 className="font-semibold text-zinc-900 dark:text-zinc-50">
@@ -276,7 +276,7 @@ function QCHandoverStageWidgets({ data }: { data: StageWidgetsProps["data"] }) {
       </div>
 
       {/* Handover Readiness */}
-      <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-6">
+      <div className="rounded-lg border border-border bg-card p-6">
         <div className="flex items-center gap-2 mb-4">
           <CheckCircle className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
           <h4 className="font-semibold text-zinc-900 dark:text-zinc-50">

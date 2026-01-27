@@ -14,7 +14,7 @@ export function ChatBar() {
       <button
         type="button"
         onClick={toggleBar}
-        className="fixed right-4 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-zinc-200 bg-white/90 text-zinc-600 shadow-sm hover:bg-white hover:text-zinc-800 dark:border-zinc-800 dark:bg-zinc-950/90 dark:text-zinc-300"
+        className="fixed right-4 top-1/2 z-30 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border bg-card/90 text-muted-foreground shadow-sm hover:bg-card hover:text-foreground transition-smooth"
         aria-label="Open chat bar"
       >
         <div className="relative">
@@ -30,17 +30,17 @@ export function ChatBar() {
   }
 
   return (
-    <aside className="fixed right-4 top-20 bottom-6 z-30 flex w-64 flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white/95 text-xs text-zinc-800 shadow-lg backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-950/95 dark:text-zinc-100">
-      <div className="flex items-center justify-between px-3 py-2 border-b border-zinc-200/80 dark:border-zinc-800/80">
+    <aside className="fixed right-4 top-20 bottom-6 z-30 flex w-64 flex-col overflow-hidden rounded-2xl border border-border bg-card/95 text-xs text-foreground shadow-lg backdrop-blur-sm">
+      <div className="flex items-center justify-between px-3 py-2 border-b border-border">
         <div className="flex items-center gap-2">
-          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-100 text-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
+          <div className="flex h-7 w-7 items-center justify-center rounded-md bg-muted text-foreground">
             <MessageCircle className="h-3.5 w-3.5" />
           </div>
           <div className="flex flex-col leading-tight">
-            <span className="text-[11px] font-medium text-zinc-800 dark:text-zinc-50">
+            <span className="text-[11px] font-medium text-foreground">
               Project chats
             </span>
-            <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
+            <span className="text-[10px] text-muted-foreground">
               Optional, always on the side
             </span>
           </div>
@@ -48,7 +48,7 @@ export function ChatBar() {
         <button
           type="button"
           onClick={toggleBar}
-          className="inline-flex h-7 w-7 items-center justify-center rounded-full text-zinc-400 hover:bg-zinc-100 hover:text-zinc-700 dark:text-zinc-500 dark:hover:bg-zinc-900 dark:hover:text-zinc-100"
+          className="inline-flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-smooth"
           aria-label="Collapse chat bar"
         >
           <ChevronRight className="h-3.5 w-3.5" />
@@ -65,9 +65,9 @@ export function ChatBar() {
               key={chat.id}
               type="button"
               onClick={() => openChat(chat.id)}
-              className="w-full rounded-xl px-2.5 py-2 text-left hover:bg-zinc-50 border border-transparent hover:border-zinc-200 flex items-start gap-2 dark:hover:bg-zinc-900/70 dark:hover:border-zinc-800"
+              className="w-full rounded-xl px-2.5 py-2 text-left hover:bg-muted border border-transparent hover:border-border flex items-start gap-2 transition-smooth"
             >
-              <div className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-zinc-100 text-[11px] font-semibold text-zinc-700 dark:bg-zinc-900 dark:text-zinc-100">
+              <div className="mt-0.5 flex h-7 w-7 items-center justify-center rounded-full bg-muted text-[11px] font-semibold text-foreground">
                 {chat.projectName
                   .split(" ")
                   .filter(Boolean)
@@ -77,7 +77,7 @@ export function ChatBar() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-1">
-                  <p className="truncate text-[12px] font-medium text-zinc-900 dark:text-zinc-50">
+                  <p className="truncate text-[12px] font-medium text-foreground">
                     {chat.projectName}
                   </p>
                   {chat.unreadCount > 0 && (
@@ -86,10 +86,10 @@ export function ChatBar() {
                     </span>
                   )}
                 </div>
-                <p className="mt-0.5 line-clamp-1 text-[11px] text-zinc-500 dark:text-zinc-400">
+                <p className="mt-0.5 line-clamp-1 text-[11px] text-muted-foreground">
                   {preview}
                 </p>
-                <div className="mt-1 flex items-center gap-1 text-[9px] text-zinc-400 dark:text-zinc-500">
+                <div className="mt-1 flex items-center gap-1 text-[9px] text-muted-foreground">
                   <Circle className={cn("h-2 w-2", "text-emerald-400")} />
                   <span>Site crew</span>
                 </div>

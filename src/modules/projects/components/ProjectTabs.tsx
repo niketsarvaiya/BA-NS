@@ -12,36 +12,64 @@ import {
   Activity,
   FolderOpen,
   MessageCircle,
+  ClipboardList,
+  Wrench,
+  Code2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/modules/auth/context/AuthContext";
 
 interface Tab {
   id: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
+  /** Roles that see this tab. If omitted, all roles see it. */
+  roles?: string[];
+  /** Roles that should NOT see this tab. */
+  hideForRoles?: string[];
 }
 
-const TABS: Tab[] = [
+const FIELD_ROLES = ["technician", "programmer", "qc"];
+const OFFICE_ROLES = ["admin", "supervisor", "store"];
+
+const ALL_TABS: Tab[] = [
+  // Shared - Always first
   { id: "overview", label: "Overview", icon: LayoutDashboard },
-  { id: "build", label: "Build", icon: Hammer },
+
+  // Office-only: Build
+  { id: "build", label: "Build", icon: Hammer, hideForRoles: FIELD_ROLES },
+
+  // BOQ - shared
   { id: "boq", label: "BOQ", icon: FileText },
-  { id: "tasks", label: "Tasks", icon: ListChecks },
-  // Visits are already integrated into Activity – hide this tab for V1.
-  // { id: "visits", label: "Visits", icon: Users },
-  { id: "qc", label: "QC", icon: ShieldCheck },
+
+  // Role-based task tabs for admin/supervisor
+  { id: "pm-tasks", label: "PM Tasks", icon: ClipboardList, roles: ["admin", "supervisor"] },
+  { id: "installer-tasks", label: "Installer Tasks", icon: Wrench, roles: ["admin", "supervisor"] },
+  { id: "programmer-tasks", label: "Programmer Tasks", icon: Code2, roles: ["admin", "supervisor"] },
+  { id: "qc-tasks", label: "QC Tasks", icon: ShieldCheck, roles: ["admin", "supervisor"] },
+
+  // Field-only: Site Tasks
+  { id: "field", label: "Site Tasks", icon: ListChecks, roles: FIELD_ROLES },
+
+  // Shared
   { id: "notes", label: "Notes", icon: StickyNote },
   { id: "activity", label: "Activity", icon: Activity },
-  // Files depend on Google Drive – keep hidden for V1.
-  // { id: "files", label: "Files", icon: FolderOpen },
-  // Chat lives in the fixed right-side panel – keep this tab hidden for V1.
-  // { id: "chat", label: "Chat", icon: MessageCircle },
+  { id: "files", label: "Files", icon: FolderOpen },
 ];
 
 export function ProjectTabs() {
   const router = useRouter();
   const params = useParams();
   const pathname = usePathname();
+  const { user } = useAuth();
   const projectId = params.projectId as string;
+  const role = user?.role ?? null;
+
+  const visibleTabs = ALL_TABS.filter((tab) => {
+    if (tab.roles && role && !tab.roles.includes(role)) return false;
+    if (tab.hideForRoles && role && tab.hideForRoles.includes(role)) return false;
+    return true;
+  });
 
   const getActiveTab = (): string => {
     if (!pathname) return "overview";
@@ -57,10 +85,10 @@ export function ProjectTabs() {
   };
 
   return (
-    <div className="border-b border-zinc-300 dark:border-zinc-800/70 bg-zinc-50 dark:bg-zinc-950/40">
+    <div className="border-b border-border bg-muted/30">
       <div className="overflow-x-auto scrollbar-hide">
         <nav className="flex gap-1 px-4 min-w-max" role="tablist">
-          {TABS.map((tab) => {
+          {visibleTabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
 
@@ -72,16 +100,15 @@ export function ProjectTabs() {
                 aria-selected={isActive}
                 onClick={() => handleTabClick(tab.id)}
                 className={cn(
-                  "group relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors",
-                  "hover:text-zinc-800 dark:text-zinc-100",
+                  "group relative flex items-center gap-2 px-4 py-3 text-sm font-medium transition-smooth",
                   isActive
-                    ? "text-zinc-900 dark:text-zinc-50"
-                    : "text-zinc-400 dark:text-zinc-400"
+                    ? "text-foreground"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 <Icon className={cn(
-                  "h-4 w-4 transition-colors",
-                  isActive ? "text-primary" : "text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-600 dark:text-zinc-300"
+                  "h-4 w-4 transition-smooth",
+                  isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground"
                 )} />
                 <span>{tab.label}</span>
 

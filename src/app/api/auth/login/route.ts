@@ -59,6 +59,14 @@ export const mockUsers: MockUser[] = [
     password: "store123",
     mustChangePassword: false,
   },
+  {
+    id: "7",
+    name: "Field Electrician",
+    username: "electrician",
+    role: "technician",
+    password: "electrician123",
+    mustChangePassword: false,
+  },
 ];
 
 function createAccessToken(user: AuthUser): string {

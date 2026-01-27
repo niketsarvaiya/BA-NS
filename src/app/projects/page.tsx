@@ -30,10 +30,10 @@ export default function ProjectsPage() {
       {/* Page Header */}
       <div className="flex items-start justify-between">
         <div className="space-y-1.5">
-          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+          <h1 className="text-page-title text-foreground">
             Projects
           </h1>
-          <p className="text-sm text-zinc-400 dark:text-zinc-400 max-w-2xl">
+          <p className="text-body text-muted-foreground max-w-2xl">
             Track execution across all active sites.
           </p>
         </div>
@@ -41,14 +41,14 @@ export default function ProjectsPage() {
           <Button
             variant="outline"
             size="sm"
-            className="hidden sm:inline-flex h-9 border-zinc-300 dark:border-zinc-700 bg-zinc-900/60 text-xs text-zinc-700 dark:text-zinc-200 hover:bg-zinc-200 dark:bg-zinc-800/80 transition-colors"
+            className="hidden sm:inline-flex h-9 text-xs transition-smooth"
           >
             <Download className="mr-1.5 h-3.5 w-3.5" />
             Export
           </Button>
           <Button
             size="sm"
-            className="h-9 text-xs bg-primary hover:bg-primary/90 transition-colors"
+            className="h-9 text-xs transition-smooth"
           >
             <Plus className="mr-1.5 h-3.5 w-3.5" />
             New Project
@@ -63,18 +63,18 @@ export default function ProjectsPage() {
           return (
             <Card
               key={stat.label}
-              className="border-zinc-300 dark:border-zinc-800/70 bg-zinc-50 dark:bg-zinc-950/60 shadow-sm hover:shadow-md transition-shadow duration-150"
+              className="border-border bg-card shadow-sm hover:shadow-md transition-smooth"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-xs font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-400">
+                <CardTitle className="text-meta text-muted-foreground uppercase tracking-wide">
                   {stat.label}
                 </CardTitle>
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-600 dark:text-zinc-300">
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-muted-foreground">
                   <Icon className="h-3.5 w-3.5" />
                 </div>
               </CardHeader>
               <CardContent>
-                <p className="text-2xl font-semibold text-zinc-900 dark:text-zinc-50">{stat.value}</p>
+                <p className="text-2xl font-semibold text-foreground">{stat.value}</p>
               </CardContent>
             </Card>
           );
@@ -86,21 +86,21 @@ export default function ProjectsPage() {
 
       {/* Main Content: Table or Empty State */}
       {showEmpty ? (
-        <Card className="border-zinc-300 dark:border-zinc-800/70 bg-zinc-50 dark:bg-zinc-950/60 shadow-sm">
+        <Card className="border-border bg-card shadow-sm">
           <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-900 text-zinc-400 dark:text-zinc-400 mb-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted text-muted-foreground mb-4">
               <FolderOpen className="h-8 w-8" />
             </div>
-            <h3 className="text-lg font-semibold text-zinc-800 dark:text-zinc-100 mb-2">
+            <h3 className="text-lg font-semibold text-foreground mb-2">
               No projects yet
             </h3>
-            <p className="text-sm text-zinc-400 dark:text-zinc-400 max-w-sm mb-6">
+            <p className="text-body text-muted-foreground max-w-sm mb-6">
               Create your first project to start tracking execution, tasks, and
               site visits.
             </p>
             <Button
               size="sm"
-              className="h-9 text-xs bg-primary hover:bg-primary/90 transition-colors"
+              className="h-9 text-xs transition-smooth"
             >
               <Plus className="mr-1.5 h-3.5 w-3.5" />
               Create First Project

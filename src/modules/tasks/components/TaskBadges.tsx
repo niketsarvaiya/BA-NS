@@ -31,7 +31,7 @@ export function StakeholderBadge({ stakeholder }: StakeholderBadgeProps) {
     SITE_SUPERVISOR: "Supervisor",
     CLIENT: "Client",
     DESIGNER: "Designer",
-    ELECTRICIAN: "Electrician",
+    ELECTRICIAN: "Installer",
     CARPENTER: "Carpenter",
     THIRD_PARTY: "3rd Party",
     STORE: "Store",

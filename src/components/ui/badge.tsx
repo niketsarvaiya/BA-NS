@@ -16,17 +16,17 @@ export interface BadgeProps
 
 const variantClasses: Record<BadgeVariant, string> = {
   default:
-    "border-zinc-700 bg-zinc-900 text-zinc-100",
+    "border-border bg-primary text-primary-foreground",
   outline:
-    "border-zinc-600/80 text-zinc-100",
+    "border-border text-foreground",
   success:
-    "border-emerald-500/40 bg-emerald-500/10 text-emerald-300",
+    "border-emerald-500/40 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400",
   warning:
-    "border-amber-500/40 bg-amber-500/10 text-amber-300",
+    "border-amber-500/40 bg-amber-500/10 text-amber-600 dark:text-amber-400",
   destructive:
-    "border-red-500/40 bg-red-500/10 text-red-300",
+    "border-red-500/40 bg-red-500/10 text-red-600 dark:text-red-400",
   muted:
-    "border-zinc-700/60 bg-zinc-900/70 text-zinc-300",
+    "border-border bg-muted text-muted-foreground",
 };
 
 const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(

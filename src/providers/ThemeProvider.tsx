@@ -2,48 +2,107 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-type Theme = "dark" | "light";
+// Beyond theme identifiers
+// - "calm"  → Beyond Calm (default, existing light design system)
+// - "neo"   → Beyond Neo (futuristic dark mode layered on top of existing system)
+export type ThemeId = "calm" | "neo";
 
 interface ThemeContextValue {
-  theme: Theme;
+  theme: ThemeId;
+  setTheme: (theme: ThemeId) => void;
   toggleTheme: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-const STORAGE_KEY = "beyond-assist-theme";
+const STORAGE_KEY_BASE = "beyond-assist-theme-v1";
+const AUTH_STORAGE_KEY = "beyond-assist-auth";
+
+function readActiveUserIdFromStorage(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(AUTH_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { user?: { id?: string } };
+    const userId = parsed?.user?.id;
+    return typeof userId === "string" ? userId : null;
+  } catch {
+    return null;
+  }
+}
+
+function getStorageKeyForActiveUser(): string {
+  const userId = readActiveUserIdFromStorage();
+  return userId ? `${STORAGE_KEY_BASE}:${userId}` : STORAGE_KEY_BASE;
+}
+
+function readInitialTheme(): ThemeId {
+  if (typeof window === "undefined") return "calm";
+
+  try {
+    const storageKey = getStorageKeyForActiveUser();
+    const stored = window.localStorage.getItem(storageKey) as ThemeId | null;
+    if (stored === "neo" || stored === "calm") {
+      return stored;
+    }
+  } catch {
+    // ignore and fall back to Calm
+  }
+
+  return "calm";
+}
+
+function persistTheme(theme: ThemeId) {
+  if (typeof window === "undefined") return;
+  try {
+    const storageKey = getStorageKeyForActiveUser();
+    window.localStorage.setItem(storageKey, theme);
+  } catch {
+    // ignore storage errors; theme still applies in-session
+  }
+}
+
+function applyThemeToDocument(theme: ThemeId) {
+  if (typeof document === "undefined") return;
+
+  const root = document.documentElement;
+
+  // Reset core theme classes first
+  root.classList.remove("dark", "theme-neo", "theme-calm");
+
+  if (theme === "neo") {
+    // Beyond Neo → dark, layered, premium
+    root.classList.add("dark", "theme-neo");
+    root.style.setProperty("color-scheme", "dark");
+  } else {
+    // Beyond Calm → existing light system
+    root.classList.add("theme-calm");
+    root.style.setProperty("color-scheme", "light");
+  }
+}
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>("dark");
-  const [mounted, setMounted] = useState(false);
+  const [theme, setThemeState] = useState<ThemeId>(readInitialTheme);
 
+  // Apply theme whenever it changes
   useEffect(() => {
-    setMounted(true);
-    // Load theme from localStorage
-    const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
-    if (stored && (stored === "dark" || stored === "light")) {
-      setTheme(stored);
-    }
-  }, []);
+    applyThemeToDocument(theme);
+  }, [theme]);
 
-  useEffect(() => {
-    if (!mounted) return;
-
-    // Apply theme to document
-    const root = document.documentElement;
-    root.classList.remove("dark", "light");
-    root.classList.add(theme);
-
-    // Save to localStorage
-    localStorage.setItem(STORAGE_KEY, theme);
-  }, [theme, mounted]);
+  const setTheme = (next: ThemeId) => {
+    setThemeState((current) => {
+      const value = next ?? current;
+      persistTheme(value);
+      return value;
+    });
+  };
 
   const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+    setTheme(theme === "calm" ? "neo" : "calm");
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

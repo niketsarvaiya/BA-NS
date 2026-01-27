@@ -83,7 +83,7 @@ export function GlobalNoteComposer() {
       <NoteComposerPanel open={open} onClose={() => setOpen(false)} onSaved={handleSaved} />
 
       {showToast && (
-        <div className="fixed bottom-6 right-6 lg:right-[360px] z-40 rounded-full border border-zinc-300 bg-zinc-900/90 px-4 py-2 text-sm text-zinc-50 shadow-lg dark:border-zinc-700">
+        <div className="fixed bottom-6 right-6 lg:right-[360px] z-40 rounded-full border border-border bg-foreground px-4 py-2 text-sm text-background shadow-lg">
           Note added to project
         </div>
       )}
@@ -249,7 +249,7 @@ function NoteComposerPanel({ open, onClose, onSaved }: NoteComposerPanelProps) {
       title="New Note"
       subtitle="Capture context and attach it to a project"
       icon={
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-zinc-900/90 text-zinc-50 dark:bg-zinc-50 dark:text-zinc-900">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground">
           <StickyNote className="h-5 w-5" />
         </div>
       }
@@ -285,7 +285,7 @@ function NoteComposerPanel({ open, onClose, onSaved }: NoteComposerPanelProps) {
               value={noteDate}
               onChange={(e) => setNoteDate(e.target.value)}
             />
-            <p className="mt-1 text-[11px] text-zinc-500 dark:text-zinc-400">
+            <p className="mt-1 text-[11px] text-muted-foreground">
               Created on: {new Date().toLocaleString("en-IN")}
             </p>
           </div>
@@ -318,10 +318,10 @@ function NoteComposerPanel({ open, onClose, onSaved }: NoteComposerPanelProps) {
                     key={option.id}
                     type="button"
                     onClick={() => setType(option.id)}
-                    className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs transition-colors ${
+                    className={`inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs transition-smooth ${
                       type === option.id
-                        ? "border-zinc-900 bg-zinc-900 text-zinc-50 dark:border-zinc-100 dark:bg-zinc-100 dark:text-zinc-900"
-                        : "border-zinc-300 text-zinc-600 hover:border-zinc-400 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500"
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
                     }`}
                   >
                     {option.id === "MOM" && (
@@ -366,7 +366,7 @@ function NoteComposerPanel({ open, onClose, onSaved }: NoteComposerPanelProps) {
                   {attendees.map((name) => (
                     <span
                       key={name}
-                      className="inline-flex items-center gap-1 rounded-full bg-zinc-900/90 px-2 py-0.5 text-[11px] text-zinc-50 dark:bg-zinc-50 dark:text-zinc-900"
+                      className="inline-flex items-center gap-1 rounded-full bg-primary px-2 py-0.5 text-[11px] text-primary-foreground"
                     >
                       {name}
                       <button
@@ -374,7 +374,7 @@ function NoteComposerPanel({ open, onClose, onSaved }: NoteComposerPanelProps) {
                         onClick={() =>
                           setAttendees((prev) => prev.filter((a) => a !== name))
                         }
-                        className="ml-0.5 text-[10px] opacity-70 hover:opacity-100"
+                        className="ml-0.5 text-[10px] opacity-70 hover:opacity-100 transition-smooth"
                       >
                         ×
                       </button>
@@ -413,7 +413,7 @@ function NoteComposerPanel({ open, onClose, onSaved }: NoteComposerPanelProps) {
                 <Label>Action Items</Label>
                 <div className="space-y-2">
                   {actionItems.length > 0 && (
-                    <ul className="space-y-1 text-sm text-zinc-700 dark:text-zinc-300">
+                    <ul className="space-y-1 text-sm text-foreground">
                       {actionItems.map((item, idx) => (
                         <li key={idx} className="flex items-center justify-between gap-2">
                           <span className="flex-1 truncate">{item}</span>
@@ -424,7 +424,7 @@ function NoteComposerPanel({ open, onClose, onSaved }: NoteComposerPanelProps) {
                                 prev.filter((_, i) => i !== idx)
                               )
                             }
-                            className="text-[11px] text-zinc-400 hover:text-zinc-200"
+                            className="text-[11px] text-muted-foreground hover:text-foreground transition-smooth"
                           >
                             Remove
                           </button>

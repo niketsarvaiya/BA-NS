@@ -129,7 +129,7 @@ export function ProjectsTable({ projects = MOCK_PROJECTS }: ProjectsTableProps) 
   };
 
   return (
-    <div className="rounded-lg border border-zinc-300 dark:border-zinc-800/70 bg-zinc-50 dark:bg-zinc-950/60 overflow-hidden">
+    <div className="rounded-lg border border-border bg-card overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
@@ -152,16 +152,16 @@ export function ProjectsTable({ projects = MOCK_PROJECTS }: ProjectsTableProps) 
             >
               <TableCell>
                 <div className="flex flex-col gap-0.5">
-                  <span className="font-medium text-zinc-900 dark:text-zinc-50">
+                  <span className="font-medium text-foreground">
                     {project.name}
                   </span>
-                  <span className="text-xs text-zinc-400 dark:text-zinc-400">{project.code}</span>
+                  <span className="text-xs text-muted-foreground">{project.code}</span>
                 </div>
               </TableCell>
-              <TableCell className="text-zinc-700 dark:text-zinc-200">
+              <TableCell className="text-foreground">
                 {project.clientName}
               </TableCell>
-              <TableCell className="text-zinc-600 dark:text-zinc-300">
+              <TableCell className="text-muted-foreground">
                 {project.location}
               </TableCell>
               <TableCell>
@@ -170,17 +170,17 @@ export function ProjectsTable({ projects = MOCK_PROJECTS }: ProjectsTableProps) 
               <TableCell>
                 <ProjectHealthBadge health={project.health} />
               </TableCell>
-              <TableCell className="text-zinc-600 dark:text-zinc-300">
+              <TableCell className="text-muted-foreground">
                 {project.nextMilestone}
               </TableCell>
-              <TableCell className="text-zinc-400 dark:text-zinc-400 text-xs">
+              <TableCell className="text-muted-foreground text-xs">
                 {project.lastUpdated}
               </TableCell>
               <TableCell className="text-right">
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-7 text-xs text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:text-zinc-50"
+                  className="h-7 text-xs transition-smooth"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleRowClick(project.id);

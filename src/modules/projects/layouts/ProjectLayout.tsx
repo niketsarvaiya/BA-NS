@@ -25,15 +25,15 @@ export function ProjectLayout({ children }: ProjectLayoutProps) {
             <Button
               variant="ghost"
               size="sm"
-              className="h-8 text-xs text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:text-zinc-50"
+              className="h-8 text-xs transition-smooth"
             >
               <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
               Back to Projects
             </Button>
           </Link>
         </div>
-        <div className="rounded-lg border border-zinc-300 dark:border-zinc-800/70 bg-zinc-50 dark:bg-zinc-950/60 p-8 text-center">
-          <p className="text-zinc-400 dark:text-zinc-400">Project not found: {projectId}</p>
+        <div className="rounded-lg border border-border bg-card p-8 text-center">
+          <p className="text-muted-foreground">Project not found: {projectId}</p>
         </div>
       </div>
     );
@@ -47,7 +47,7 @@ export function ProjectLayout({ children }: ProjectLayoutProps) {
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 text-xs text-zinc-600 dark:text-zinc-300 hover:text-zinc-900 dark:text-zinc-50"
+            className="h-8 text-xs transition-smooth"
           >
             <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
             Back to Projects
@@ -61,7 +61,7 @@ export function ProjectLayout({ children }: ProjectLayoutProps) {
       {/* Main project layout */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
         <div className="flex-1 min-w-0">
-          <div className="overflow-hidden rounded-lg border border-zinc-300 bg-zinc-50 shadow-sm dark:border-zinc-800/70 dark:bg-zinc-950/60">
+          <div className="overflow-hidden rounded-lg border border-border bg-card shadow-sm">
             <ProjectTabs />
 
             {/* Content Area */}

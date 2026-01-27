@@ -10,11 +10,11 @@ export function UpcomingMilestones({ milestones }: UpcomingMilestonesProps) {
   const upcomingMilestones = milestones.slice(0, 3);
 
   return (
-    <div className="rounded-lg border border-zinc-200/80 bg-white/70 p-6 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-950/70">
-      <h3 className="mb-1 text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+    <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
+      <h3 className="mb-1 text-sm font-semibold text-foreground">
         Upcoming milestones
       </h3>
-      <p className="mb-4 text-xs text-zinc-500 dark:text-zinc-400">
+      <p className="mb-4 text-xs text-muted-foreground">
         Next 2–3 checkpoints that can change project risk
       </p>
 
@@ -44,7 +44,7 @@ export function UpcomingMilestones({ milestones }: UpcomingMilestonesProps) {
                       ? "text-red-900 dark:text-red-100"
                       : isDueSoon
                       ? "text-amber-900 dark:text-amber-100"
-                      : "text-zinc-900 dark:text-zinc-50"
+                      : "text-foreground"
                   )}
                 >
                   {milestone.title}
@@ -90,10 +90,10 @@ export function UpcomingMilestones({ milestones }: UpcomingMilestonesProps) {
                 {milestone.status === "IN_PROGRESS" && milestone.progress !== undefined && (
                   <div className="mt-3">
                     <div className="flex items-center justify-between text-xs mb-1">
-                      <span className="text-zinc-500 dark:text-zinc-400">
+                      <span className="text-muted-foreground">
                         Progress
                       </span>
-                      <span className="text-zinc-700 dark:text-zinc-300 font-medium">
+                      <span className="text-foreground font-medium">
                         {milestone.progress}%
                       </span>
                     </div>
@@ -111,7 +111,7 @@ export function UpcomingMilestones({ milestones }: UpcomingMilestonesProps) {
         </div>
       ) : (
         <div className="p-8 text-center">
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+          <p className="text-sm text-muted-foreground">
             No upcoming milestones
           </p>
         </div>

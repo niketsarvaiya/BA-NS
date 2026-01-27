@@ -73,14 +73,14 @@ export default async function ProjectOverviewPage({
   return (
     <div className="w-full max-w-[1600px] mx-auto space-y-6">
       {/* Section 1: Project state header */}
-      <section className="rounded-lg border border-zinc-200/70 bg-white/60 p-6 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-950/70">
+      <section className="rounded-lg border border-border bg-card p-6 shadow-sm">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="space-y-1">
-            <h2 className="text-xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">
               {project.name}
             </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              Current stage: <span className="font-medium text-zinc-900 dark:text-zinc-50">{stageConfig?.label}</span>
+            <p className="text-sm text-muted-foreground">
+              Current stage: <span className="font-medium text-foreground">{stageConfig?.label}</span>
             </p>
           </div>
 

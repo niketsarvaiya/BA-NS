@@ -1,7 +1,14 @@
+"use client";
+
+import React, { useMemo, useState } from "react";
 import type { SiteBOQItem } from "../../types/siteBOQ";
 import { DetailPanel, DetailPanelSection } from "@/components/ui/detail-panel";
-import { Package, AlertCircle, CheckCircle2, Clock } from "lucide-react";
+import { Package, AlertCircle, CheckCircle2, Clock, ListChecks } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { useAuth } from "@/modules/auth/context/AuthContext";
+import { useFieldTasks } from "@/modules/field-mode/hooks/useFieldTasks";
+import type { FieldTask } from "@/modules/field-mode/types";
+import { FieldTaskActionSheet } from "@/modules/field-mode/components/FieldTaskActionSheet";
 
 interface SiteBOQItemDetailPanelProps {
   item: SiteBOQItem;
@@ -9,6 +16,10 @@ interface SiteBOQItemDetailPanelProps {
 }
 
 export function SiteBOQItemDetailPanel({ item, onClose }: SiteBOQItemDetailPanelProps) {
+  const { user } = useAuth();
+  const fieldCtx = useFieldTasks();
+  const [activeTask, setActiveTask] = useState<FieldTask | null>(null);
+
   const iconElement = (
     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950/20">
       <Package className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
@@ -28,6 +39,29 @@ export function SiteBOQItemDetailPanel({ item, onClose }: SiteBOQItemDetailPanel
 
   const bottleneck = getBottleneck();
   const isComplete = Object.values(item.status).every((v) => v);
+
+  const roleStakeholders: string[] = useMemo(() => {
+    if (!user) return [];
+    switch (user.role) {
+      case "technician":
+        return ["ELECTRICIAN", "INSTALLER"];
+      case "programmer":
+        return ["PROGRAMMER"];
+      case "qc":
+        return ["QC"];
+      default:
+        return [];
+    }
+  }, [user]);
+
+  const roleTasks = useMemo(() => {
+    if (!roleStakeholders.length) return [] as FieldTask[];
+    return fieldCtx.tasks.filter((t) => {
+      const matchesRole = roleStakeholders.includes(t.base.stakeholder as string);
+      const matchesItem = t.base.title.includes(item.itemName);
+      return matchesRole && matchesItem;
+    });
+  }, [fieldCtx.tasks, roleStakeholders, item.itemName]);
 
   return (
     <DetailPanel
@@ -113,19 +147,74 @@ export function SiteBOQItemDetailPanel({ item, onClose }: SiteBOQItemDetailPanel
           </div>
         </DetailPanelSection>
 
-        {/* Related Information - Placeholder */}
-        <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-6 text-center dark:border-slate-700 dark:bg-slate-800/50">
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            Additional features coming soon:
-          </p>
-          <ul className="mt-2 text-xs text-slate-400 dark:text-slate-500 space-y-1">
-            <li>• Related tasks ({Math.floor(Math.random() * 5) + 1})</li>
-            <li>• Related activities ({Math.floor(Math.random() * 8) + 2})</li>
-            <li>• Status change history</li>
-            <li>• Room allocations</li>
-          </ul>
-        </div>
+        {/* Field Tasks for current role */}
+        {user && (
+          <DetailPanelSection
+            title="Your Tasks for This Item"
+            icon={<ListChecks className="h-3.5 w-3.5" />}
+          >
+            {roleTasks.length === 0 ? (
+              <p className="text-sm text-slate-500 dark:text-slate-400">
+                No tasks mapped to your role for this item.
+              </p>
+            ) : (
+              <div className="space-y-2">
+                {roleTasks.map((task) => (
+                  <button
+                    key={task.base.id}
+                    type="button"
+                    onClick={() => setActiveTask(task)}
+                    className="w-full flex items-center justify-between rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-left hover:border-indigo-400 hover:shadow-sm transition-smooth"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-slate-900 dark:text-slate-100 truncate">
+                        {task.base.title}
+                      </p>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                        Status: {task.base.status === "DONE" ? "Completed" : "Open"}
+                      </p>
+                    </div>
+                    {task.flag?.isFlagged && (
+                      <span className="ml-2 inline-flex items-center rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-200 px-2 py-0.5 text-[10px]">
+                        Flagged
+                      </span>
+                    )}
+                    {task.block?.isBlocked && (
+                      <span className="ml-2 inline-flex items-center rounded-full bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-200 px-2 py-0.5 text-[10px]">
+                        Blocked
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            )}
+          </DetailPanelSection>
+        )}
       </div>
+
+      {/* Bottom-sheet task actions */}
+      <FieldTaskActionSheet
+        open={!!activeTask}
+        task={activeTask}
+        onOpenChange={(open) => {
+          if (!open) setActiveTask(null);
+        }}
+        onComplete={(taskId, opts) => {
+          fieldCtx.completeTask(taskId, { mediaIds: opts?.mediaIds });
+        }}
+        onUploadPhoto={(taskId, mediaId) => {
+          fieldCtx.addPhoto(taskId, mediaId);
+        }}
+        onFlag={(taskId, reason, opts) => {
+          fieldCtx.flagTask(taskId, reason, { note: opts?.note, mediaIds: opts?.mediaIds });
+        }}
+        onBlocked={(taskId, isBlocked, opts) => {
+          fieldCtx.setBlocked(taskId, isBlocked, opts);
+        }}
+        onAddNote={(taskId, note) => {
+          fieldCtx.addNote(taskId, note);
+        }}
+      />
     </DetailPanel>
   );
 }

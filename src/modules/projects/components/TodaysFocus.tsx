@@ -22,12 +22,12 @@ export function TodaysFocus({
   const topPriorities = priorities.slice(0, 3);
 
   return (
-    <div className="rounded-lg border border-zinc-200/80 bg-white/70 p-6 shadow-sm dark:border-zinc-800/80 dark:bg-zinc-950/70">
+    <div className="rounded-lg border border-border bg-card p-6 shadow-sm">
       <div className="mb-5 flex items-baseline justify-between gap-2">
-        <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">
+        <h3 className="text-lg font-semibold text-foreground">
           Today&apos;s Focus
         </h3>
-        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+        <p className="text-xs text-muted-foreground">
           Top 3 moves to keep this project on track
         </p>
       </div>
@@ -38,7 +38,7 @@ export function TodaysFocus({
           {topPriorities.map((priority, index) => (
             <div
               key={priority.id}
-              className="flex items-center gap-3 rounded-lg border border-zinc-200/80 bg-zinc-50/80 p-3.5 text-sm dark:border-zinc-800/80 dark:bg-zinc-900/70"
+              className="flex items-center gap-3 rounded-lg border border-border bg-muted p-3.5 text-sm"
             >
               <div
                 className={cn(
@@ -54,10 +54,10 @@ export function TodaysFocus({
               </div>
 
               <div className="flex min-w-0 flex-1 flex-col gap-1">
-                <p className="truncate font-medium text-zinc-900 dark:text-zinc-50">
+                <p className="truncate font-medium text-foreground">
                   {priority.title}
                 </p>
-                <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+                <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                   <span>{priority.assignee}</span>
                   {priority.dueDate && (
                     <>
@@ -88,7 +88,7 @@ export function TodaysFocus({
           ))}
         </div>
       ) : (
-        <div className="mb-6 rounded-lg border border-dashed border-zinc-300/70 bg-zinc-50/60 p-6 text-center text-sm text-zinc-500 dark:border-zinc-700/70 dark:bg-zinc-900/70 dark:text-zinc-400">
+        <div className="mb-6 rounded-lg border border-dashed border-border bg-muted p-6 text-center text-sm text-muted-foreground">
           No priorities set for today.
         </div>
       )}

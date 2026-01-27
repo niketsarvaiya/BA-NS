@@ -42,22 +42,22 @@ export function DetailPanel({
       {/* Panel */}
       <div
         className={cn(
-          "fixed top-16 bottom-0 right-0 border-l border-slate-200 bg-white shadow-xl dark:border-slate-700 dark:bg-slate-900 overflow-y-auto z-40",
+          "fixed top-16 bottom-0 right-0 border-l border-border bg-card shadow-xl overflow-y-auto z-40",
           widthClasses[width],
           className
         )}
       >
         {/* Sticky Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-6 py-4 dark:border-slate-700 dark:bg-slate-900">
+        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-card px-6 py-4">
           <div className="flex items-center gap-3 flex-1 min-w-0">
             {icon && <div className="flex-shrink-0">{icon}</div>}
             <div className="min-w-0 flex-1">
               {subtitle && (
-                <div className="text-xs text-slate-500 dark:text-slate-400">
+                <div className="text-xs text-muted-foreground">
                   {subtitle}
                 </div>
               )}
-              <h2 className="text-base font-semibold text-slate-900 dark:text-slate-100 truncate">
+              <h2 className="text-section-header text-foreground truncate">
                 {title}
               </h2>
             </div>
@@ -95,7 +95,7 @@ export function DetailPanelSection({
 }: DetailPanelSectionProps) {
   return (
     <div className={cn("space-y-2", className)}>
-      <div className="flex items-center gap-2 text-xs font-medium text-slate-700 dark:text-slate-300">
+      <div className="flex items-center gap-2 text-meta font-medium text-foreground">
         {icon && <span className="flex-shrink-0">{icon}</span>}
         {title}
       </div>
