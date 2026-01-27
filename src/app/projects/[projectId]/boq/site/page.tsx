@@ -351,10 +351,11 @@ export default function SiteBOQPage() {
                             <div className="space-y-4">
                               {Object.entries(
                                 item.units!.reduce((acc, unit) => {
-                                  if (!acc[unit.roomName]) {
-                                    acc[unit.roomName] = [];
+                                  const roomKey = unit.roomName || 'Unassigned';
+                                  if (!acc[roomKey]) {
+                                    acc[roomKey] = [];
                                   }
-                                  acc[unit.roomName].push(unit);
+                                  acc[roomKey].push(unit);
                                   return acc;
                                 }, {} as Record<string, typeof item.units>)
                               ).map(([roomName, units]) => (
