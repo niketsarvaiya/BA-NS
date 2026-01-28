@@ -1,15 +1,16 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { ShieldCheck, Search, ListChecks, FileText } from "lucide-react";
+import { ShieldCheck, Search, ListChecks, FileText, AlertTriangle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import type { RoleBasedTask } from "../types/role-tasks";
 import { CollapsibleTaskGroup } from "./CollapsibleTaskGroup";
 import { RoleTaskDetailPanel } from "./RoleTaskDetailPanel";
 import { QCDocumentsTab } from "@/modules/projects/components/qc/QCDocumentsTab";
-import { getMockQCDocuments } from "@/modules/projects/utils/mockQCData";
-import type { QCDocument } from "@/modules/projects/types";
+import { QCSnagsTab } from "@/modules/projects/components/qc/QCSnagsTab";
+import { getMockQCDocuments, getMockSnags } from "@/modules/projects/utils/mockQCData";
+import type { QCDocument, Snag } from "@/modules/projects/types";
 import {
   MOCK_QC_TASKS,
   MOCK_TASK_ROOMS,
@@ -27,6 +28,9 @@ export function QCTasksView({ projectId }: QCTasksViewProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [documents] = useState<QCDocument[]>(() =>
     getMockQCDocuments(projectId ?? "proj-002")
+  );
+  const [snags, setSnags] = useState<Snag[]>(() =>
+    getMockSnags(projectId ?? "proj-002")
   );
 
   // Filter tasks by search
@@ -61,6 +65,19 @@ export function QCTasksView({ projectId }: QCTasksViewProps) {
     if (!roomId) return undefined;
     return MOCK_TASK_ROOMS.find((r) => r.id === roomId)?.name;
   };
+
+  const handleSnagUpdate = (snagId: string, patch: Partial<Snag>) => {
+    setSnags((current) =>
+      current.map((snag) => (snag.id === snagId ? { ...snag, ...patch } : snag))
+    );
+  };
+
+  // Calculate snag stats for display
+  const snagStats = useMemo(() => {
+    const open = snags.filter((s) => s.status === "OPEN" || s.status === "IN_PROGRESS").length;
+    const resolved = snags.filter((s) => s.status === "RESOLVED" || s.status === "CLOSED").length;
+    return { open, resolved, total: snags.length };
+  }, [snags]);
 
   // Calculate QC-specific stats
   const qcStats = useMemo(() => {
@@ -113,6 +130,20 @@ export function QCTasksView({ projectId }: QCTasksViewProps) {
             <div className="flex items-center gap-2">
               <ListChecks className="h-4 w-4" />
               <span>Tasks</span>
+            </div>
+          </TabsTrigger>
+          <TabsTrigger
+            value="snags"
+            className="data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-800 data-[state=active]:shadow-sm text-sm px-4 py-2 rounded-md"
+          >
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4" />
+              <span>Snag List</span>
+              {snagStats.open > 0 && (
+                <span className="ml-1 inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-amber-500 px-1.5 text-[10px] font-semibold text-white">
+                  {snagStats.open}
+                </span>
+              )}
             </div>
           </TabsTrigger>
           <TabsTrigger
@@ -234,6 +265,10 @@ export function QCTasksView({ projectId }: QCTasksViewProps) {
               roomName={getRoomName(selectedTask.roomId)}
             />
           )}
+        </TabsContent>
+
+        <TabsContent value="snags" className="mt-4">
+          <QCSnagsTab snags={snags} onUpdateSnag={handleSnagUpdate} />
         </TabsContent>
 
         <TabsContent value="documents" className="mt-4">
