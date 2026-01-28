@@ -1,11 +1,15 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { ShieldCheck, Search } from "lucide-react";
+import { ShieldCheck, Search, ListChecks, FileText } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import type { RoleBasedTask } from "../types/role-tasks";
 import { CollapsibleTaskGroup } from "./CollapsibleTaskGroup";
 import { RoleTaskDetailPanel } from "./RoleTaskDetailPanel";
+import { QCDocumentsTab } from "@/modules/projects/components/qc/QCDocumentsTab";
+import { getMockQCDocuments } from "@/modules/projects/utils/mockQCData";
+import type { QCDocument } from "@/modules/projects/types";
 import {
   MOCK_QC_TASKS,
   MOCK_TASK_ROOMS,
@@ -21,6 +25,9 @@ export function QCTasksView({ projectId }: QCTasksViewProps) {
   const [tasks, setTasks] = useState<RoleBasedTask[]>(MOCK_QC_TASKS);
   const [selectedTask, setSelectedTask] = useState<RoleBasedTask | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [documents] = useState<QCDocument[]>(() =>
+    getMockQCDocuments(projectId ?? "proj-002")
+  );
 
   // Filter tasks by search
   const filteredTasks = useMemo(() => {
@@ -96,113 +103,143 @@ export function QCTasksView({ projectId }: QCTasksViewProps) {
         </div>
       </div>
 
-      {/* QC Summary Card */}
-      <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-6">
+      {/* Tabs for Tasks and Documents */}
+      <Tabs defaultValue="tasks" className="w-full">
+        <TabsList className="bg-zinc-100 dark:bg-zinc-900 p-1 rounded-lg">
+          <TabsTrigger
+            value="tasks"
+            className="data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-800 data-[state=active]:shadow-sm text-sm px-4 py-2 rounded-md"
+          >
             <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-emerald-500" />
-              <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                Passed: <span className="font-semibold text-emerald-600">{qcStats.passed}</span>
-              </span>
+              <ListChecks className="h-4 w-4" />
+              <span>Tasks</span>
             </div>
+          </TabsTrigger>
+          <TabsTrigger
+            value="documents"
+            className="data-[state=active]:bg-white dark:data-[state=active]:bg-zinc-800 data-[state=active]:shadow-sm text-sm px-4 py-2 rounded-md"
+          >
             <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-red-500" />
-              <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                Failed: <span className="font-semibold text-red-600">{qcStats.failed}</span>
-              </span>
+              <FileText className="h-4 w-4" />
+              <span>Documents</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full bg-zinc-300 dark:bg-zinc-600" />
-              <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                Pending: <span className="font-semibold">{qcStats.pending}</span>
-              </span>
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="tasks" className="mt-4 space-y-4">
+          {/* QC Summary Card */}
+          <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-6">
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-emerald-500" />
+                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                    Passed: <span className="font-semibold text-emerald-600">{qcStats.passed}</span>
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-red-500" />
+                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                    Failed: <span className="font-semibold text-red-600">{qcStats.failed}</span>
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="h-3 w-3 rounded-full bg-zinc-300 dark:bg-zinc-600" />
+                  <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                    Pending: <span className="font-semibold">{qcStats.pending}</span>
+                  </span>
+                </div>
+              </div>
+              
+              {/* Progress */}
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-zinc-500 dark:text-zinc-400">
+                  Progress
+                </span>
+                <div className="w-32 h-2 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-emerald-500 rounded-full transition-all"
+                    style={{
+                      width: `${stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0}%`,
+                    }}
+                  />
+                </div>
+                <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
+                  {stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0}%
+                </span>
+              </div>
             </div>
           </div>
-          
-          {/* Progress */}
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-zinc-500 dark:text-zinc-400">
-              Progress
-            </span>
-            <div className="w-32 h-2 bg-zinc-100 dark:bg-zinc-800 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-emerald-500 rounded-full transition-all"
-                style={{
-                  width: `${stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0}%`,
-                }}
+
+          {/* Stats Summary */}
+          <div className="grid grid-cols-5 gap-4">
+            <StatCard label="Total" value={stats.total} />
+            <StatCard label="Not Started" value={stats.notStarted} color="zinc" />
+            <StatCard label="In Progress" value={stats.inProgress} color="blue" />
+            <StatCard label="Blocked" value={stats.blocked} color="red" />
+            <StatCard label="Done" value={stats.done} color="emerald" />
+          </div>
+
+          {/* Task Groups */}
+          <div className="space-y-4">
+            {/* Room Groups */}
+            {roomGroups.map((group) => (
+              <CollapsibleTaskGroup
+                key={group.roomId}
+                title={group.roomName}
+                tasks={group.tasks}
+                icon="room"
+                onTaskClick={setSelectedTask}
               />
-            </div>
-            <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-50">
-              {stats.total > 0 ? Math.round((stats.done / stats.total) * 100) : 0}%
-            </span>
+            ))}
+
+            {/* General Tasks */}
+            {generalGroup.tasks.length > 0 && (
+              <CollapsibleTaskGroup
+                title={generalGroup.name}
+                tasks={generalGroup.tasks}
+                icon="general"
+                onTaskClick={setSelectedTask}
+              />
+            )}
+
+            {/* Hygiene Tasks */}
+            {hygieneGroup.tasks.length > 0 && (
+              <CollapsibleTaskGroup
+                title={hygieneGroup.name}
+                tasks={hygieneGroup.tasks}
+                icon="hygiene"
+                onTaskClick={setSelectedTask}
+              />
+            )}
+
+            {/* Empty State */}
+            {roomGroups.length === 0 &&
+              generalGroup.tasks.length === 0 &&
+              hygieneGroup.tasks.length === 0 && (
+                <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-12 text-center">
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                    No QC tasks found
+                  </p>
+                </div>
+              )}
           </div>
-        </div>
-      </div>
 
-      {/* Stats Summary */}
-      <div className="grid grid-cols-5 gap-4">
-        <StatCard label="Total" value={stats.total} />
-        <StatCard label="Not Started" value={stats.notStarted} color="zinc" />
-        <StatCard label="In Progress" value={stats.inProgress} color="blue" />
-        <StatCard label="Blocked" value={stats.blocked} color="red" />
-        <StatCard label="Done" value={stats.done} color="emerald" />
-      </div>
-
-      {/* Task Groups */}
-      <div className="space-y-4">
-        {/* Room Groups */}
-        {roomGroups.map((group) => (
-          <CollapsibleTaskGroup
-            key={group.roomId}
-            title={group.roomName}
-            tasks={group.tasks}
-            icon="room"
-            onTaskClick={setSelectedTask}
-          />
-        ))}
-
-        {/* General Tasks */}
-        {generalGroup.tasks.length > 0 && (
-          <CollapsibleTaskGroup
-            title={generalGroup.name}
-            tasks={generalGroup.tasks}
-            icon="general"
-            onTaskClick={setSelectedTask}
-          />
-        )}
-
-        {/* Hygiene Tasks */}
-        {hygieneGroup.tasks.length > 0 && (
-          <CollapsibleTaskGroup
-            title={hygieneGroup.name}
-            tasks={hygieneGroup.tasks}
-            icon="hygiene"
-            onTaskClick={setSelectedTask}
-          />
-        )}
-
-        {/* Empty State */}
-        {roomGroups.length === 0 &&
-          generalGroup.tasks.length === 0 &&
-          hygieneGroup.tasks.length === 0 && (
-            <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950/70 p-12 text-center">
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                No QC tasks found
-              </p>
-            </div>
+          {/* Task Detail Panel */}
+          {selectedTask && (
+            <RoleTaskDetailPanel
+              task={selectedTask}
+              onClose={() => setSelectedTask(null)}
+              onUpdate={handleTaskUpdate}
+              roomName={getRoomName(selectedTask.roomId)}
+            />
           )}
-      </div>
+        </TabsContent>
 
-      {/* Task Detail Panel */}
-      {selectedTask && (
-        <RoleTaskDetailPanel
-          task={selectedTask}
-          onClose={() => setSelectedTask(null)}
-          onUpdate={handleTaskUpdate}
-          roomName={getRoomName(selectedTask.roomId)}
-        />
-      )}
+        <TabsContent value="documents" className="mt-4">
+          <QCDocumentsTab documents={documents} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
